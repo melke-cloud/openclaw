@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#05050a">
+<title>SHATTERCORE — Kinetic Siege</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+<canvas id="game" aria-label="SHATTERCORE 3D game"></canvas>
+<div class="vignette"></div><div class="scan"></div><div class="flash" id="flash"></div>
+<div class="hud">
+  <div class="top">
+    <div class="brand"><b>SHATTERCORE</b><small>KINETIC SIEGE</small></div>
+    <div class="sector" id="sector">SEKTOR 01</div>
+    <div class="actions"><button class="icon" id="sound" aria-label="Lyd">◖</button><button class="icon" id="restart" aria-label="Start på nytt">↻</button></div>
+  </div>
+  <div class="stats"><div class="stat"><span>Kjerner</span><b id="cores">3</b></div><div class="stat"><span>Skudd</span><b id="shots">5</b></div><div class="stat"><span>Poeng</span><b id="score">0000</b></div></div>
+  <div class="spacer"></div>
+  <div class="bottom">
+    <div class="weaponbar">
+      <button class="weapon active" data-weapon="pulse"><i>●</i><b>PULSE</b><small>Balansert</small></button>
+      <button class="weapon" data-weapon="split"><i>✦</i><b>SPLIT</b><small>Tre kuler</small></button>
+      <button class="weapon" data-weapon="breaker"><i>◆</i><b>BREAKER</b><small>Tung kraft</small></button>
+    </div>
+    <div class="aimbox" id="aimbox"><div class="aimrow"><span id="aimtext">Dra for å sikte</span><b id="power">50%</b></div><div class="meter"><i id="fill"></i></div><div class="hint">Slipp for å avfyre · treff eksplosiver for kjedereaksjon</div></div>
+  </div>
+</div>
+<div class="toast" id="toast">KJERNE KNUST</div>
+<div class="overlay show" id="start"><div class="card"><div class="eyebrow">3D destruction puzzle</div><h1>SHATTER<br>CORE</h1><p>Knus reaktorkjernene med fysikk, rikosjetter og kjedereaksjoner. Færre skudd gir høyere rangering.</p><div class="features"><div><b>3D</b><span>WebGL</span></div><div><b>6</b><span>Sektorer</span></div><div><b>3</b><span>Våpen</span></div></div><button class="primary" id="startbtn">Start sektor 01</button></div></div>
+<div class="overlay" id="result"><div class="card"><div class="eyebrow" id="resultEye">Sektor eliminert</div><h1 id="resultTitle">Klarert</h1><div class="stars" id="stars">★★★</div><p id="resultText">Alle energikjerner er ødelagt.</p><div class="summary"><div><span>Poeng</span><b id="finalScore">0</b></div><div><span>Skudd</span><b id="usedShots">0</b></div><div><span>Combo</span><b id="bestCombo">x1</b></div></div><button class="primary" id="next">Neste sektor</button><button class="secondary" id="again">Spill igjen</button></div></div>
+<div class="unsupported" id="unsupported"><div><h2>WebGL kreves</h2><p>Åpne spillet i Safari på en nyere iPhone.</p></div></div>
+<div class="debug" id="debug"></div>
+</div>
+<script src="p1.js"></script>
+<script src="p2.js"></script>
+<script src="p3.js"></script>
+<script src="p4.js"></script>
+<script src="p5.js"></script>
+<script src="p6.js"></script>
+<script src="p7.js"></script>
+<script src="p8.js"></script>
+</body>
+</html>
