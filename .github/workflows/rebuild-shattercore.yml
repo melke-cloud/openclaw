@@ -1,0 +1,68 @@
+name: Rebuild SHATTERCORE direct bundle
+
+on:
+  push:
+    branches:
+      - shattercore
+    paths:
+      - "demos/shattercore-v2/p*.js"
+      - "demos/shattercore-v2/index.html"
+      - ".github/workflows/rebuild-shattercore.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: shattercore
+          fetch-depth: 0
+
+      - name: Decode game bundle without eval
+        shell: python
+        run: |
+          import base64
+          import pathlib
+          import re
+
+          root = pathlib.Path("demos/shattercore-v2")
+          parts = []
+          for number in range(1, 9):
+              source = (root / f"p{number}.js").read_text(encoding="utf-8")
+              match = re.search(r'window\.__SC_B64(?:\+)?="([^"]*)"', source)
+              if not match:
+                  raise RuntimeError(f"Missing encoded payload in p{number}.js")
+              parts.append(match.group(1))
+
+          game = base64.b64decode("".join(parts)).decode("utf-8")
+          if "startbtn" not in game or "requestAnimationFrame(loop)" not in game:
+              raise RuntimeError("Decoded game bundle failed validation")
+          (root / "game.js").write_text(game, encoding="utf-8")
+
+          index_path = root / "index.html"
+          index = index_path.read_text(encoding="utf-8")
+          index = re.sub(
+              r'(?:\s*<script src="p[1-8]\.js"></script>){8}',
+              '\n<script src="game.js?v=4"></script>',
+              index,
+          )
+          if 'src="game.js?v=4"' not in index:
+              raise RuntimeError("Could not replace encoded script tags")
+          index_path.write_text(index, encoding="utf-8")
+
+      - name: Commit rebuilt browser-safe files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add demos/shattercore-v2/index.html demos/shattercore-v2/game.js
+          if git diff --cached --quiet; then
+            echo "No generated changes"
+          else
+            git commit -m "Fix SHATTERCORE startup on Safari"
+            git push origin HEAD:shattercore
+          fi
